@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() ~ title }}{% endblock title %}
+
+{% block body %}
+    <div style="text-align: center;">
+        <h1>{{ title }}</h1>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                {% for key, value in accounts[0] %}
+                    <th>{{ key }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for account in accounts %}
+                <tr>
+                    {% for key, value in account %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock body %}
