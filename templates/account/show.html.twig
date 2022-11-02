@@ -3,5 +3,30 @@
 {% block title %}{{ parent() ~ title }}{% endblock title %}
 
 {% block body %}
-
+    <h4 class="mb-2">Value: ${{ account.value|number_format(2, '.', ',') }}</h4>
+    <div class="row mt-4">
+        <div class="col-12 mb-4">
+            <table class="w-100">
+                <thead>
+                    <tr>
+                        {% for key, value in account %}
+                            {% if key != 'institution_url' %}
+                                <th>{{ key|upper|replace({'_': ' '}) }}</th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ account.name }}</td>
+                        <td>{{ account.account_type }}</td>
+                        <td><a href="{{ account.institution_url }}" target="_blank">{{ account.institution }}</td>
+                        <td>{{ account.owner }}</td>
+                        <td>{{ account.account_number }}</td>
+                        <td>${{ account.value|number_format(2, '.', ',') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock body %}
