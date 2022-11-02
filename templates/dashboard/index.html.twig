@@ -9,29 +9,19 @@
             <table>
                 <thead>
                     <tr>
-                        {% for key, value in accounts[0] %}
-                            {% if key != 'institution_url' %}
-                                <th>{{ key|upper|replace({'_': ' '}) }}</th>
-                            {% endif %}
-                        {% endfor %}
+                        <th>Account</th>
+                        <th>Value</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for account in accounts %}
                         <tr>
                             <td>{{ account.name }}</td>
-                            <td>{{ account.account_type }}</td>
-                            <td><a href="{{ account.institution_url }}" target="_blank">{{ account.institution }}</td>
-                            <td>{{ account.owner }}</td>
-                            <td>{{ account.account_number }}</td>
                             <td>${{ account.value|number_format(2, '.', ',') }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-    </div>
-    <div class="px-2">
-        <button type="button" class="btn btn-success"><i class="fas fa-plus"></i> Add an Account</button>
     </div>
 {% endblock body %}
