@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Controller\Api\AccountApiController;
+use App\Entity\Account;
+use Exception;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,15 +21,32 @@ class AccountController extends AbstractController
 
     /**
      * @throws JsonException
+     * @throws Exception
      */
     #[Route('/', name: 'accounts')]
     public function index(): Response
     {
-        $accounts = json_decode($this->api->all()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $responseContent = json_decode($this->api->all()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $total_value = 0.00;
-        foreach ($accounts as $account) {
+        $accounts = [];
+        $time_properties = [
+            'created_at',
+            'updated_at',
+            'deleted_at',
+        ];
+        foreach ($responseContent as $item) {
+            $account = [];
+            foreach ($item as $key => $value) {
+                if ($value && in_array($key, $time_properties, true)) {
+                    $account[$key] = new \DateTime($value);
+                }
+                else {
+                    $account[$key] = $value;
+                }
+            }
             $total_value += $account['value'];
+            $accounts[] = $account;
         }
 
         return $this->render('account/index.html.twig', [

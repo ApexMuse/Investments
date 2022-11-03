@@ -7,23 +7,46 @@
     <div class="row mt-4">
         <div class="col-12 mb-4">
             <table class="w-100">
-                <thead>
-                    <tr>
-                        {% for key, value in account %}
-                            {% if key != 'institution_url' %}
-                                <th>{{ key|upper|replace({'_': ' '}) }}</th>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                </thead>
                 <tbody>
                     <tr>
+                        <th>ID</th>
+                        <td>{{ account.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>NAME</th>
                         <td>{{ account.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>TYPE</th>
                         <td>{{ account.account_type }}</td>
+                    </tr>
+                    <tr>
+                        <th>INSTITUTION</th>
                         <td><a href="{{ account.institution_url }}" target="_blank">{{ account.institution }}</td>
+                    </tr>
+                    <tr>
+                        <th>OWNER</th>
                         <td>{{ account.owner }}</td>
+                    </tr>
+                    <tr>
+                        <th>ACCT NUMBER</th>
                         <td>{{ account.account_number }}</td>
+                    </tr>
+                    <tr>
+                        <th>VALUE</th>
                         <td>${{ account.value|number_format(2, '.', ',') }}</td>
+                    </tr>
+                    <tr>
+                        <th>CREATED AT</th>
+                        <td>{{ account.getCreatedAt() }}</td>
+                    </tr>
+                    <tr>
+                        <th>UPDATED AT</th>
+                        <td>{{ account.updated_at }}</td>
+                    </tr>
+                    <tr>
+                        <th>DELETED AT</th>
+                        <td>{{ account.deleted_at }}</td>
                     </tr>
                 </tbody>
             </table>
