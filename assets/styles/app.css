@@ -1,5 +1,48 @@
+@import "~bootstrap";
+@import "~@fontsource/roboto-condensed";
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
 body {
-	background-color: #17242C;
+	background-color: #112138;
 	color: #fff;
 	font-family: 'Roboto Condensed', sans-serif;
+	max-width: 1080px;
+	margin: 0 auto;
+}
+
+table {
+	border: 1px solid;
+}
+
+th, td {
+	padding: 10px;
+	text-align: left;
+}
+
+th {
+	background-color: #626262;
+	border-bottom: 2px solid #FFFFFF;
+}
+
+td {
+	border-bottom: 1px solid #ADADAD;
+}
+
+.clickable:hover {
+	background: gray;
+	cursor: pointer;
+}
+
+[draggable] {
+	user-select: none;
+	-webkit-user-drag: element;
+	cursor: move;
+}
+
+table.sortable i.fa.fa-arrows {
+	color: #999;
+}
+
+tr.over {
+	border: 1px dashed red;
 }
