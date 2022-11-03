@@ -4,8 +4,12 @@ namespace App\Controller\Api;
 
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class AccountApiController extends AbstractController
 {
@@ -96,12 +100,12 @@ class AccountApiController extends AbstractController
     }
 
     /**
-     * @throws JsonException
+     * @throws TransportExceptionInterface
      */
     #[Route('/api/accounts', name: 'api_accounts_all', methods: ['GET'])]
-    public function all(): Response
+    public function all(): ResponseInterface
     {
-        return new Response(json_encode($this->accounts, JSON_THROW_ON_ERROR), 200);
+        return $this->http->request('GET', 'https://raw.githubusercontent.com/ApexMuse/Investments/main/accounts.json?token=GHSAT0AAAAAABVHGEYHDME7TEVRFRM47WL6Y3ED45A');
     }
 
     /**
