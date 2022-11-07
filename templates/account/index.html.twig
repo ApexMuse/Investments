@@ -3,7 +3,7 @@
 {% block title %}{{ parent() ~ title }}{% endblock title %}
 
 {% block body %}
-    <h4 class="mb-2">Total Value: ${{ total_value|number_format(2, '.', ',') }}</h4>
+    <h4 class="mb-2">Total Value: $Nunya</h4>
     <div class="row mt-4">
         <div class="col-12 mb-4">
             <table class="w-100">
@@ -13,7 +13,6 @@
                         <th>TYPE</th>
                         <th>CHANGE $</th>
                         <th>CHANGE %</th>
-                        <th>VALUE</th>
                         <th>CREATED</th>
                     </tr>
                 </thead>
@@ -25,7 +24,6 @@
                             <td>{{ account.account_type }}</td>
                             <td></td>
                             <td></td>
-                            <td>${{ account.value|number_format(2, '.', ',') }}</td>
                             <td>{{ account.created_at|ago }}</td>
                         </tr>
                     {% endfor %}

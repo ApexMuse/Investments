@@ -2,61 +2,31 @@
 
 namespace App\Controller;
 
-use App\Controller\Api\AccountApiController;
-use App\Entity\Account;
+use App\Repository\AccountRepository;
 use Exception;
 use JsonException;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AccountController extends AbstractController
 {
-    private AccountApiController $api;
-
-    public function __construct()
-    {
-        $this->api = new AccountApiController();
-    }
+    public function __construct(
+        private AccountRepository $account_repository
+    ) {}
 
     /**
-     * @throws Exception
-     * @throws TransportExceptionInterface|DecodingExceptionInterface
+     * @throws Exception|InvalidArgumentException
      */
     #[Route('/', name: 'accounts')]
-    public function index(HttpClientInterface $http_client): Response
+    public function index(): Response
     {
-        $response = $http_client->request('GET', 'https://raw.githubusercontent.com/ApexMuse/Investments/main/accounts.json');
-        $responseContent = $response->toArray();
-
-        $total_value = 0.00;
-        $accounts = [];
-        $time_properties = [
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ];
-        foreach ($responseContent as $item) {
-            $account = [];
-            foreach ($item as $key => $value) {
-                if ($value && in_array($key, $time_properties, true)) {
-                    $account[$key] = new \DateTime($value);
-                }
-                else {
-                    $account[$key] = $value;
-                }
-            }
-            $total_value += $account['value'];
-            $accounts[] = $account;
-        }
+        $accounts = $this->account_repository->findAll();
 
         return $this->render('account/index.html.twig', [
             'title' => 'Accounts',
-            'accounts' => $accounts,
-            'total_value' => $total_value
+            'accounts' => $accounts
         ]);
     }
 
