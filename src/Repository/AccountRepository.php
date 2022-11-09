@@ -2,48 +2,65 @@
 
 namespace App\Repository;
 
-use Exception;
-use Psr\Cache\InvalidArgumentException;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Entity\Account;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class AccountRepository
+/**
+ * @extends ServiceEntityRepository<Account>
+ *
+ * @method Account|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Account|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Account[]    findAll()
+ * @method Account[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+class AccountRepository extends ServiceEntityRepository
 {
-    public function __construct(
-        private readonly HttpClientInterface $github_http_client,
-        private readonly CacheInterface $cache
-    ) {}
-
-    /**
-     * @throws InvalidArgumentException
-     * @throws Exception
-     */
-    public function findAll(): array
+    public function __construct(ManagerRegistry $registry)
     {
-        $responseContent = $this->cache->get('accounts', function () {
-            return $this->github_http_client->request('GET', '/ApexMuse/Investments/main/accounts.json')->toArray();
-        });
-
-        $accounts = [];
-        $time_properties = [
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ];
-
-        foreach ($responseContent as $item) {
-            $account = [];
-            foreach ($item as $key => $value) {
-                if ($value && in_array($key, $time_properties, true)) {
-                    $account[$key] = new \DateTime($value);
-                }
-                else {
-                    $account[$key] = $value;
-                }
-            }
-            $accounts[] = $account;
-        }
-
-        return $accounts;
+        parent::__construct($registry, Account::class);
     }
+
+    public function save(Account $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Account $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+//    /**
+//     * @return Account[] Returns an array of Account objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('a.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
+
+//    public function findOneBySomeField($value): ?Account
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }

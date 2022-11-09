@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Repository\AccountRepository;
+use App\Repository\AccountRepositoryOld;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class TalkToMeCommand extends Command
 {
     public function __construct(
-        private AccountRepository $account_repository
+        private readonly AccountRepositoryOld $account_repository
     ) {
         parent::__construct();
     }

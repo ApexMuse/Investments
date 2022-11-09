@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\AccountRepository;
+use App\Repository\AccountRepositoryOld;
 use Exception;
 use JsonException;
 use Psr\Cache\InvalidArgumentException;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AccountController extends AbstractController
 {
     public function __construct(
-        private AccountRepository $account_repository
+        private AccountRepositoryOld $account_repository
     ) {}
 
     /**
